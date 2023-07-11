@@ -27,5 +27,4 @@ dependencies: [
 import Requests
 
 let result = Requests.get("https://example.com/")
-}
 ```
