@@ -6,8 +6,10 @@ public class Session {
     private func request(_ url: String,
                  method: String)
     {
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = method
+        if let url = URL(string: url) {
+            var request = URLRequest(url: url)
+            request.httpMethod = method
+        }
     }
 }
 
