@@ -1,6 +1,3 @@
-public struct Requests {
-    public private(set) var text = "Hello, World!"
+import Foundation
 
-    public init() {
-    }
-}
+public let Requests = Session()
