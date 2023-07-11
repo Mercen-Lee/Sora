@@ -1,7 +1,7 @@
 import Foundation
 
 extension Request {
-    func decode<T: Codable>(_ type: T.Type,
+    public func decode<T: Codable>(_ type: T.Type,
                             completion: @escaping (T) -> Void)
     {
         let request = self.build()
