@@ -1,3 +1,3 @@
 # Requests
 
-A description of this package.
+HTTP for Humans in Swift
