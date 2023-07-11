@@ -21,3 +21,11 @@ dependencies: [
     .package(url: "https://github.com/Mercen-Lee/Requests.git", .branch("main"))
 ]
 ```
+
+## Usage
+```swift
+import Requests
+
+let result = Requests.get("https://example.com/")
+}
+```
