@@ -38,7 +38,7 @@ struct SampleService: SoraService {
 ```swift
 struct GetUserRequest: SoraRequest {
 
-    let service: SampleService = .path("user")
+    let route: SampleService = .path("user")
     let method: SoraMethod = .get
 }
 
@@ -48,7 +48,7 @@ AF.request(GetUserRequest())
 ```swift
 struct PostUserRequest: SoraRequest {
 
-    let service: SampleService = .path("user", "post")
+    let route: SampleService = .path("user", "post")
     let method: SoraMethod = .post
     
     let body: Body

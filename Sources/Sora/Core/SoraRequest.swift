@@ -28,9 +28,9 @@ import Alamofire
 /// A type used to define a request can be converted to the `URLRequest`.
 public protocol SoraRequest: URLRequestConvertible {
     
-    /// The `SoraService` of the request.
+    /// The `SoraService` route of the request.
     associatedtype Service: SoraService
-    var service: Service { get }
+    var route: Service { get }
     
     /// The HTTP method of the request.
     var method: SoraMethod { get }
@@ -61,7 +61,7 @@ public extension SoraRequest {
     
     /// A simple implement of `asURLRequest` method of `SoraRequest`.
     func asURLRequest() throws -> URLRequest {
-        var request = URLRequest(url: service.url)
+        var request = URLRequest(url: route.url)
         request.httpMethod = method.rawValue
         return try encoder.encode(body, into: request)
     }
