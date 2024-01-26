@@ -1,11 +1,8 @@
-![Requests](https://raw.githubusercontent.com/Mercen-Lee/Requests/main/Resources/RequestsLogoDark.png#gh-dark-mode-only)
-![Requests](https://raw.githubusercontent.com/Mercen-Lee/Requests/main/Resources/RequestsLogoLight.png#gh-light-mode-only)
-
 ![Swift](https://img.shields.io/badge/Swift-5.5_5.6_5.7_5.8-Orange?style=flat-square)
 ![Platforms](https://img.shields.io/badge/Platforms-macOS_iOS_tvOS_watchOS-yellowgreen?style=flat-square)
 ![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange?style=flat-square)
 
-HTTP for Humans in Swift
+Swift Networking
 
 ## Requirements
 | Platform | Minimum Swift Version | Installation |
@@ -18,13 +15,6 @@ HTTP for Humans in Swift
 - Or add it to the `dependencies` value of your `Package.swift`.
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Mercen-Lee/Requests.git", .branch("main"))
+    .package(url: "https://github.com/Mercen-Lee/Sora.git", .branch("main"))
 ]
-```
-
-## Usage
-```swift
-import Requests
-
-let result = Requests.get("https://example.com/")
 ```
