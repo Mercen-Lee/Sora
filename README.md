@@ -23,3 +23,35 @@ dependencies: [
   .package(url: "https://github.com/Mercen-Lee/Sora.git", .branch("main"))
 ]
 ```
+
+## Usage
+### Service
+```swift
+struct SampleService: SoraService {
+    let endpoint: URL = URL(string: "https://sample.com/api/")!
+    let interceptor: Interceptor = .init()
+    let path: [String]
+}
+```
+### GET Request
+```swift
+struct GetUserRequest: SoraRequest {
+    let service = SampleService(path: ["user"])
+    let method: HTTPMethod = .get
+}
+
+AF.request(GetUserRequest())
+```
+### POST Request
+```swift
+struct PostUserRequest: SoraRequest {
+    let service = SampleService(path: ["user"])
+    let method: HTTPMethod = .post
+    struct Body: Encodable {
+        let id: Int
+        let name: String
+    }
+}
+
+AF.request(PostUserRequest())
+```
