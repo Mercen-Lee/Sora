@@ -2,12 +2,17 @@ import XCTest
 import Alamofire
 @testable import Sora
 
+struct TestService: SoraService {
+    
+    let endpoint: URL = URL(string: "https://example.com/")!
+}
+
 struct PostExample: SoraRequest {
     
-    let endpoint: String = "sample"
+    let service = TestService(path: "hi")
     let method: HTTPMethod = .post
     
-    struct Body: Codable {
+    struct Body: Encodable {
         
         let name: String
         let age: Int
@@ -17,6 +22,9 @@ struct PostExample: SoraRequest {
 final class SoraTests: XCTestCase {
     
     func testPostRequest() throws {
-        
+        PostExample()
+            .responseDecodable {
+                
+            }
     }
 }
