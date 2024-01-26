@@ -61,3 +61,12 @@ struct PostUserRequest: SoraRequest {
 
 AF.request(PostUserRequest(body: .init(id: 1, name: "mercen")))
 ```
+### Simple Concurrency
+```swift
+do {
+    let response = try await GetUserRequest()
+        .request(with: AnyDecodable.self)
+} catch let error {
+    // on Error
+}
+```

@@ -35,6 +35,6 @@ public extension Session {
     /// - Returns:       The created `DataRequest`.
     func request(_ soraRequest: any SoraRequest) -> DataRequest {
         return request(soraRequest,
-                       interceptor: soraRequest.service.interceptor)
+                       interceptor: soraRequest.route.interceptor)
     }
 }

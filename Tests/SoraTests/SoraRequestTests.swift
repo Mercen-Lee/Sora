@@ -15,7 +15,7 @@ final class SoraTests: XCTestCase {
     func testGetRequest() async throws {
         
         struct GetExample: SoraRequest {
-            let service: TestService = .path("users")
+            let route: TestService = .path("users")
             let method: SoraMethod = .get
         }
         
@@ -23,9 +23,11 @@ final class SoraTests: XCTestCase {
             .validate()
             .serializingDecodable(Empty.self)
             .response
+        
         if case let .failure(error) = response.result {
             throw error
         }
+        
         XCTAssertEqual(response.response?.statusCode, 200, "Failure")
     }
     
@@ -34,7 +36,7 @@ final class SoraTests: XCTestCase {
         
         struct PostExample: SoraRequest {
             
-            let service: TestService = .path("users")
+            let route: TestService = .path("users")
             let method: SoraMethod = .post
             
             let body: Body?
@@ -47,13 +49,50 @@ final class SoraTests: XCTestCase {
         }
         
         let request = PostExample(body: .init(name: "morpheus", job: "leader"))
+        
         let response = await AF.request(request)
             .validate()
             .serializingDecodable(Empty.self)
             .response
+        
         if case let .failure(error) = response.result {
             throw error
         }
+        
         XCTAssertEqual(response.response?.statusCode, 201, "Failure")
+    }
+    
+    // MARK: - Simple Concurrency
+    func testSimpleConcurrency() async throws {
+        
+        struct GetExample: SoraRequest {
+            let route: TestService = .path("users")
+            let method: SoraMethod = .get
+        }
+        
+        struct Requres: Codable {
+            let page, perPage, total, totalPages: Int
+            let data: [Datum]
+            let support: Support
+        }
+        
+        struct Datum: Codable {
+            let id: Int
+            let email, firstName, lastName: String
+            let avatar: String
+        }
+        
+        struct Support: Codable {
+            let url: String
+            let text: String
+        }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let response = try! await GetExample()
+            .request(decodeWith: Requres.self, decoder: decoder)
+        
+        XCTAssertEqual(response.total, 12, "Failure")
     }
 }

@@ -47,6 +47,22 @@ public protocol SoraRequest: URLRequestConvertible {
     /// - Returns: A `URLRequest`.
     /// - Throws:  Any error thrown while constructing the `URLRequest`.
     func asURLRequest() throws -> URLRequest
+    
+    /// Executes a `request` asynchronously or throws if an `Error` was encountered.
+    ///
+    /// - Throws:  Any error thrown while executing the `request`.
+    func request() async throws
+    
+    /// Returns a `Decodable` asynchronously or throws if an `Error` was encountered.
+    ///
+    /// - Parameters:
+    ///   - decodeWith: `Decodable` value to decode the response data.
+    ///   - decoder:    `JSONDecoder` to decode the data with `decodeWith`.
+    ///
+    /// - Returns:      Decoded `Decodable` struct.
+    /// - Throws:       Any error thrown while executing the `request`.
+    func request<T: Decodable>(decodeWith: T.Type,
+                               decoder: JSONDecoder) async throws -> T
 }
 
 public extension SoraRequest {
@@ -59,10 +75,30 @@ public extension SoraRequest {
         method.encoder
     }
     
-    /// A simple implement of `asURLRequest` method of `SoraRequest`.
+    /// An implement of `asURLRequest` method of `SoraRequest`.
     func asURLRequest() throws -> URLRequest {
         var request = URLRequest(url: route.url)
         request.httpMethod = method.rawValue
         return try encoder.encode(body, into: request)
+    }
+    
+    /// An implement of `request` method of `SoraRequest`.
+    func request() async throws {
+        let _ = try await self.request(decodeWith: Empty.self)
+    }
+    
+    /// An implement of `request` method of `SoraRequest` with `Decodable`.
+    func request<T: Decodable>(decodeWith: T.Type,
+                               decoder: JSONDecoder = .init()) async throws -> T {
+        let response = await AF.request(self)
+            .validate()
+            .serializingDecodable(T.self, decoder: decoder)
+            .response
+        switch response.result {
+        case .success(let data):
+            return data
+        case .failure(let error):
+            throw error
+        }
     }
 }
