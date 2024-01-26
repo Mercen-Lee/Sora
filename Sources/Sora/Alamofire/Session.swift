@@ -1,5 +1,5 @@
 //
-//  SoraService.swift
+//  Session.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -22,45 +22,19 @@
 //  SOFTWARE.
 //
 
-import Foundation
 import Alamofire
 
-/// A type used to define a service for the `SoraRequest`.
-public protocol SoraService {
+/// Extension to `Session` of the `Alamofire`
+public extension Session {
     
-    /// The endpoint of the service.
-    var endpoint: URL { get }
-    
-    /// The URL path can be appended to the `endpoint`.
-    var path: [String] { get set }
-    
-    /// The `Interceptor` of Alamofire.
-    var interceptor: Interceptor { get }
-    
-    /// Default Initializer
-    init()
-    
-    /// An initializer with the `Path`
-    init(path: String...)
-}
-
-public extension SoraService {
-    
-    /// The `Interceptor` of Alamofire.
-    var interceptor: Interceptor { .init() }
-    
-    /// The URL path can be appended to the `endpoint`.
-    var path: [String] {
-        get { .init() }
-        set { }
-    }
-    
-    /// Default Initializer
-    init() { self.init() }
-    
-    /// An initializer with the `Path`
-    init(path: String...) {
-        self.init()
-        self.path = path
+    /// Creates a `DataRequest` from a `SoraRequest`.
+    ///
+    /// - Parameters:
+    ///   - soraRequest: `SoraRequest` value to be used to create the `URLRequest`.
+    ///
+    /// - Returns:       The created `DataRequest`.
+    func request(_ soraRequest: any SoraRequest) -> DataRequest {
+        return request(soraRequest,
+                       interceptor: soraRequest.service.interceptor)
     }
 }

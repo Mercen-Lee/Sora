@@ -22,8 +22,8 @@ struct PostExample: SoraRequest {
 final class SoraTests: XCTestCase {
     
     func testPostRequest() throws {
-        PostExample()
-            .responseDecodable {
+        AF.request(PostExample())
+            .responseData { response in
                 
             }
     }

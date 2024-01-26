@@ -22,10 +22,11 @@
 //  SOFTWARE.
 //
 
+import Foundation
 import Alamofire
 
 /// A type used to define a request can be converted to the `URLRequest`.
-public protocol SoraRequest {
+public protocol SoraRequest: URLRequestConvertible {
     
     /// The `Body`(a.k.a. parameter) for the request.
     associatedtype Body: Encodable
@@ -34,13 +35,22 @@ public protocol SoraRequest {
     associatedtype Service: SoraService
     var service: Service { get }
     
-    /// The HTTP Method of the request.
+    /// The HTTP method of the request.
     var method: HTTPMethod { get }
+    
+    /// Returns a `URLRequest` or throws if an `Error` was encountered.
+    ///
+    /// - Returns: A `URLRequest`.
+    /// - Throws:  Any error thrown while constructing the `URLRequest`.
+    func asURLRequest() throws -> URLRequest
 }
 
 public extension SoraRequest {
     
-    func responseDecodable(completion: @escaping () -> Void) {
-        
+    /// A simple implement of `asURLRequest` method of `Alamofire`.
+    func asURLRequest() throws -> URLRequest {
+        var request = URLRequest(url: service.url)
+        request.httpMethod = method.rawValue
+        return request
     }
 }
