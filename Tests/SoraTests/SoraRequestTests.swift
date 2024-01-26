@@ -8,9 +8,21 @@ struct TestService: SoraService {
     let path: [String]
 }
 
+struct GetExample: SoraRequest {
+    
+    let service = TestService.path("users")
+    let method: HTTPMethod = .get
+    
+    struct Body: Encodable {
+        
+        let name: String
+        let age: Int
+    }
+}
+
 struct PostExample: SoraRequest {
     
-    let service = TestService(path: ["users"])
+    let service = TestService.path("users")
     let method: HTTPMethod = .post
     
     struct Body: Encodable {

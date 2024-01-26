@@ -39,6 +39,17 @@ public protocol SoraService {
     
     /// The `Interceptor` of `Alamofire`.
     var interceptor: Interceptor { get }
+    
+    /// An initializer with the `path`
+    init(path: [String])
+    
+    /// Creates a `SoraService` from a `path`.
+    ///
+    /// - Parameters:
+    ///   - path:  `String...` value to be used to create the `SoraService`.
+    ///
+    /// - Returns: The created `SoraService`.
+    static func path(_ of: String...) -> Self
 }
 
 public extension SoraService {
@@ -52,4 +63,9 @@ public extension SoraService {
     
     /// The `Interceptor` of Alamofire.
     var interceptor: Interceptor { .init() }
+    
+    /// A simple implement of `path` method of `SoraService`.
+    static func path(_ of: String...) -> Self {
+        .init(path: of)
+    }
 }

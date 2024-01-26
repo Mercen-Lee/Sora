@@ -47,7 +47,7 @@ public protocol SoraRequest: URLRequestConvertible {
 
 public extension SoraRequest {
     
-    /// A simple implement of `asURLRequest` method of `Alamofire`.
+    /// A simple implement of `asURLRequest` method of `SoraRequest`.
     func asURLRequest() throws -> URLRequest {
         var request = URLRequest(url: service.url)
         request.httpMethod = method.rawValue

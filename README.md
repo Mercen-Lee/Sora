@@ -7,7 +7,7 @@
 
 > Elegant Networking in Swift. But more Swift.
 
-Sora is an **Alamofire wrapper for rapid development**.
+Sora is an **declarative Alamofire wrapper**.
 
 ## Requirements
 | Platform | Minimum Swift Version | Installation |
@@ -36,7 +36,7 @@ struct SampleService: SoraService {
 ### GET Request
 ```swift
 struct GetUserRequest: SoraRequest {
-    let service = SampleService(path: ["user"])
+    let service = SampleService.path("user")
     let method: HTTPMethod = .get
 }
 
@@ -45,7 +45,7 @@ AF.request(GetUserRequest())
 ### POST Request
 ```swift
 struct PostUserRequest: SoraRequest {
-    let service = SampleService(path: ["user"])
+    let service = SampleService.path("user", "post")
     let method: HTTPMethod = .post
     struct Body: Encodable {
         let id: Int
