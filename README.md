@@ -28,7 +28,8 @@ dependencies: [
 ### Service
 ```swift
 struct SampleService: SoraService {
-    let endpoint: URL = URL(string: "https://sample.com/api/")!
+
+    let endpoint: URL = .init(string: "https://sample.com/api/")!
     let interceptor: Interceptor = .init()
     let path: [String]
 }
@@ -36,8 +37,9 @@ struct SampleService: SoraService {
 ### GET Request
 ```swift
 struct GetUserRequest: SoraRequest {
-    let service = SampleService.path("user")
-    let method: HTTPMethod = .get
+
+    let service: SampleService = .path("user")
+    let method: SoraMethod = .get
 }
 
 AF.request(GetUserRequest())
@@ -45,13 +47,17 @@ AF.request(GetUserRequest())
 ### POST Request
 ```swift
 struct PostUserRequest: SoraRequest {
-    let service = SampleService.path("user", "post")
-    let method: HTTPMethod = .post
+
+    let service: SampleService = .path("user", "post")
+    let method: SoraMethod = .post
+    
+    let body: Body
+    
     struct Body: Encodable {
         let id: Int
         let name: String
     }
 }
 
-AF.request(PostUserRequest())
+AF.request(PostUserRequest(body: .init(id: 1, name: "mercen")))
 ```

@@ -4,32 +4,21 @@ import Alamofire
 
 final class SoraTests: XCTestCase {
     
+    // MARK: - SoraService
     struct TestService: SoraService {
         
         let endpoint: URL = URL(string: "https://reqres.in/api/")!
         let path: [String]
     }
-
-    struct GetExample: SoraRequest {
-        let service: TestService = .path("users")
-        let method: SoraMethod = .get
-    }
-
-    struct PostExample: SoraRequest {
-        
-        let service: TestService = .path("users")
-        let method: SoraMethod = .post
-        
-        let body: Body?
-        
-        struct Body: Encodable {
-            
-            let name: String
-            let job: String
-        }
-    }
     
+    // MARK: - GET Request
     func testGetRequest() async throws {
+        
+        struct GetExample: SoraRequest {
+            let service: TestService = .path("users")
+            let method: SoraMethod = .get
+        }
+        
         let response = await AF.request(GetExample())
             .validate()
             .serializingDecodable(Empty.self)
@@ -40,7 +29,23 @@ final class SoraTests: XCTestCase {
         XCTAssertEqual(response.response?.statusCode, 200, "Failure")
     }
     
+    // MARK: - POST Request
     func testPostRequest() async throws {
+        
+        struct PostExample: SoraRequest {
+            
+            let service: TestService = .path("users")
+            let method: SoraMethod = .post
+            
+            let body: Body?
+            
+            struct Body: Encodable {
+                
+                let name: String
+                let job: String
+            }
+        }
+        
         let request = PostExample(body: .init(name: "morpheus", job: "leader"))
         let response = await AF.request(request)
             .validate()
