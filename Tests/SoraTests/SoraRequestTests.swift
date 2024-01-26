@@ -11,31 +11,33 @@ final class SoraTests: XCTestCase {
     }
 
     struct GetExample: SoraRequest {
-        
         let service: TestService = .path("users")
         let method: SoraMethod = .get
-        
-        let body: Body
-        
-        struct Body: Encodable {
-            
-            let name: String
-            let age: Int
-        }
     }
 
     struct PostExample: SoraRequest {
         
-        let service = TestService.path("users")
+        let service: TestService = .path("users")
         let method: SoraMethod = .post
         
-        let body: Body
+        let body: Body?
         
         struct Body: Encodable {
             
             let name: String
             let job: String
         }
+    }
+    
+    func testGetRequest() async throws {
+        let response = await AF.request(GetExample())
+            .validate()
+            .serializingDecodable(Empty.self)
+            .response
+        if case let .failure(error) = response.result {
+            throw error
+        }
+        XCTAssertEqual(response.response?.statusCode, 200, "Failure")
     }
     
     func testPostRequest() async throws {

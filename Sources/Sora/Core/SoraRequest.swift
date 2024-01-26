@@ -39,8 +39,8 @@ public protocol SoraRequest: URLRequestConvertible {
     var encoder: ParameterEncoder { get }
     
     /// The `body`(a.k.a. parameter) for the request.
-    associatedtype Body: Encodable
-    var body: Body { get }
+    associatedtype Body: Encodable = Empty
+    var body: Body? { get }
     
     /// Returns a `URLRequest` or throws if an `Error` was encountered.
     ///
@@ -50,6 +50,9 @@ public protocol SoraRequest: URLRequestConvertible {
 }
 
 public extension SoraRequest {
+    
+    /// A default `body`(a.k.a. parameter) for the request.
+    var body: Body? { nil }
     
     /// A default `encoder` of the parameter.
     var encoder: ParameterEncoder {
