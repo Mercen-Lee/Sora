@@ -16,6 +16,9 @@ let package = Package(
     targets: [
         .target(
             name: "Sora",
-            dependencies: [])
+            dependencies: []),
+        .testTarget(
+            name: "SoraTests",
+            dependencies: ["Sora"])
     ]
 )
