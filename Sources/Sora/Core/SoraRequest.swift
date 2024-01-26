@@ -62,7 +62,7 @@ public protocol SoraRequest: URLRequestConvertible {
     /// - Returns:      Decoded `Decodable` struct.
     /// - Throws:       Any error thrown while executing the `request`.
     func request<T: Decodable>(decodeWith: T.Type,
-                               decoder: JSONDecoder) async throws -> T
+                               decoder: JSONDecoder?) async throws -> T
 }
 
 public extension SoraRequest {
