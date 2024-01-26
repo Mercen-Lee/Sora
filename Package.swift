@@ -12,11 +12,12 @@ let package = Package(
             targets: ["Sora"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.8.1")
     ],
     targets: [
         .target(
             name: "Sora",
-            dependencies: []),
+            dependencies: [.product(name: "Alamofire", package: "Alamofire")]),
         .testTarget(
             name: "SoraTests",
             dependencies: ["Sora"])
