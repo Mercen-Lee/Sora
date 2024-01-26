@@ -65,10 +65,13 @@ public protocol SoraRequest: URLRequestConvertible {
                                decoder: JSONDecoder?) async throws -> T
 }
 
-public extension SoraRequest {
+public extension SoraRequest where Body == Empty {
     
     /// A default `body`(a.k.a. parameter) for the request.
     var body: Body? { nil }
+}
+
+public extension SoraRequest {
     
     /// A default `encoder` of the parameter.
     var encoder: ParameterEncoder {
