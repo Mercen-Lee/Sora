@@ -40,6 +40,9 @@ public protocol SoraService {
     /// The `Interceptor` of `Alamofire`.
     var interceptor: Interceptor { get }
     
+    /// The default `JSONDecoder` of the service.
+    var decoder: JSONDecoder { get }
+    
     /// An initializer with the `path`
     init(path: [String])
     
@@ -61,8 +64,11 @@ public extension SoraService {
         }
     }
     
-    /// The `Interceptor` of Alamofire.
+    /// The `Interceptor` of `Alamofire`.
     var interceptor: Interceptor { .init() }
+    
+    /// The default `JSONDecoder` of the service.
+    var decoder: JSONDecoder { .init() }
     
     /// A simple implement of `path` method of `SoraService`.
     static func path(_ of: String...) -> Self {

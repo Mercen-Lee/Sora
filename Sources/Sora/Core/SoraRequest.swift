@@ -89,10 +89,10 @@ public extension SoraRequest {
     
     /// An implement of `request` method of `SoraRequest` with `Decodable`.
     func request<T: Decodable>(decodeWith: T.Type,
-                               decoder: JSONDecoder = .init()) async throws -> T {
+                               decoder: JSONDecoder? = nil) async throws -> T {
         let response = await AF.request(self)
             .validate()
-            .serializingDecodable(T.self, decoder: decoder)
+            .serializingDecodable(T.self, decoder: decoder ?? route.decoder)
             .response
         switch response.result {
         case .success(let data):
