@@ -28,21 +28,19 @@ import Alamofire
 /// A type used to define a request can be converted to the `URLRequest`.
 public protocol SoraRequest: URLRequestConvertible {
     
-    /// The `Body`(a.k.a. parameter) Type for the request.
-    associatedtype Body: Encodable
-    
     /// The `SoraService` of the request.
     associatedtype Service: SoraService
     var service: Service { get }
     
     /// The HTTP method of the request.
-    var method: HTTPMethod { get }
+    var method: SoraMethod { get }
     
-    /// The `encoding` of the parameter.
-    var encoding: any ParameterEncoding { get }
+    /// The `encoder` of the parameter.
+    var encoder: ParameterEncoder { get }
     
     /// The `body`(a.k.a. parameter) for the request.
-    var body: Encodable { get }
+    associatedtype Body: Encodable
+    var body: Body { get }
     
     /// Returns a `URLRequest` or throws if an `Error` was encountered.
     ///
@@ -53,15 +51,15 @@ public protocol SoraRequest: URLRequestConvertible {
 
 public extension SoraRequest {
     
-    /// A default `encoding` of the parameter.
-    var encoding: any ParameterEncoding {
-        method.encoding
+    /// A default `encoder` of the parameter.
+    var encoder: ParameterEncoder {
+        method.encoder
     }
     
     /// A simple implement of `asURLRequest` method of `SoraRequest`.
     func asURLRequest() throws -> URLRequest {
         var request = URLRequest(url: service.url)
         request.httpMethod = method.rawValue
-        return encoding.encode(request, with: body)
+        return try encoder.encode(body, into: request)
     }
 }

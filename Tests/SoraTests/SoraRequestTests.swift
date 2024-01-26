@@ -12,8 +12,10 @@ final class SoraTests: XCTestCase {
 
     struct GetExample: SoraRequest {
         
-        let service = TestService.path("users")
-        let method: HTTPMethod = .get
+        let service: TestService = .path("users")
+        let method: SoraMethod = .get
+        
+        let body: Body
         
         struct Body: Encodable {
             
@@ -25,24 +27,26 @@ final class SoraTests: XCTestCase {
     struct PostExample: SoraRequest {
         
         let service = TestService.path("users")
-        let method: HTTPMethod = .post
+        let method: SoraMethod = .post
+        
+        let body: Body
         
         struct Body: Encodable {
             
             let name: String
-            let age: Int
+            let job: String
         }
     }
     
-    func testPostRequest() throws {
-        AF.request(PostExample())
-            .responseData { response in
-                switch response.result {
-                case .success(let data):
-                    print(String(decoding: data, as: UTF8.self))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+    func testPostRequest() async throws {
+        let request = PostExample(body: .init(name: "morpheus", job: "leader"))
+        let response = await AF.request(request)
+            .validate()
+            .serializingDecodable(Empty.self)
+            .response
+        if case let .failure(error) = response.result {
+            throw error
+        }
+        XCTAssertEqual(response.response?.statusCode, 201, "Failure")
     }
 }

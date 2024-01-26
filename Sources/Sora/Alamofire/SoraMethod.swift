@@ -1,5 +1,5 @@
 //
-//  SoraRequest.swift
+//  SoraMethod.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -25,8 +25,8 @@
 import Alamofire
 
 /// Type representing HTTP methods. Raw `String` value is stored and compared case-sensitively, so
-/// `HTTPMethod.get != HTTPMethod(rawValue: "get")`.
-public enum HTTPMethod: String {
+/// `SoraMethod.get != SoraMethod(rawValue: "get")`.
+public enum SoraMethod: String {
     
     /// `CONNECT` method.
     case connect = "CONNECT"
@@ -58,13 +58,13 @@ public enum HTTPMethod: String {
     /// `TRACE` method.
     case trace = "TRACE"
     
-    /// Defining default `encoding` of the `HTTPMethod`.
-    var encoding: any ParameterEncoding {
+    /// Defining default `encoder` of the `HTTPMethod`.
+    var encoder: ParameterEncoder {
         switch self {
         case .post, .put, .patch, .delete:
-            JSONEncoding.default
+            JSONParameterEncoder.default
         default:
-            URLEncoding.default
+            URLEncodedFormParameterEncoder.default
         }
     }
 }
