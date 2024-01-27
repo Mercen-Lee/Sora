@@ -37,8 +37,8 @@ public protocol Service {
     /// The URL composed with the `endpoint` and the `path`
     var url: URL { get }
     
-    /// The `Interceptor` of `Alamofire`.
-    var interceptor: Interceptor { get }
+    /// The `RequestInterceptor` of `Alamofire`.
+    var interceptor: RequestInterceptor { get }
     
     /// The default `JSONDecoder` of the service.
     var decoder: JSONDecoder { get }
@@ -64,8 +64,8 @@ public extension Service {
         }
     }
     
-    /// The `Interceptor` of `Alamofire`.
-    var interceptor: Interceptor { .init() }
+    /// The `RequestInterceptor` of `Alamofire`.
+    var interceptor: RequestInterceptor { Interceptor() }
     
     /// The default `JSONDecoder` of the service.
     var decoder: JSONDecoder { .init() }
