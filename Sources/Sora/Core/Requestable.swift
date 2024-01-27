@@ -58,7 +58,8 @@ public protocol Requestable: URLRequestConvertible {
     /// - Returns:      Decoded `Decodable` struct.
     /// - Throws:       Any error thrown while executing the `request`.
     func request<T: Decodable>(decodeWith: T.Type,
-                               decoder: JSONDecoder?) async throws -> T
+                               decoder: JSONDecoder?,
+                               printResponse: Bool) async throws -> T
 }
 
 public extension Requestable {
