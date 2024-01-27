@@ -1,5 +1,5 @@
 //
-//  SoraService.swift
+//  Service.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -25,8 +25,8 @@
 import Foundation
 import Alamofire
 
-/// A type used to define a service for the `SoraRequest`.
-public protocol SoraService {
+/// A type used to define a service for the `Requestable`.
+public protocol Service {
     
     /// The endpoint of the service.
     var endpoint: URL { get }
@@ -46,16 +46,16 @@ public protocol SoraService {
     /// An initializer with the `path`
     init(path: [String])
     
-    /// Creates a `SoraService` from a `path`.
+    /// Creates a `Service` from a `path`.
     ///
     /// - Parameters:
-    ///   - path:  `String...` value to be used to create the `SoraService`.
+    ///   - path:  `String...` value to be used to create the `Service`.
     ///
-    /// - Returns: The created `SoraService`.
+    /// - Returns: The created `Service`.
     static func path(_ of: String...) -> Self
 }
 
-public extension SoraService {
+public extension Service {
     
     /// The URL composed with the `endpoint` and the `path`
     var url: URL {
@@ -70,7 +70,7 @@ public extension SoraService {
     /// The default `JSONDecoder` of the service.
     var decoder: JSONDecoder { .init() }
     
-    /// A simple implement of `path` method of `SoraService`.
+    /// A simple implement of `path` method of `Service`.
     static func path(_ of: String...) -> Self {
         .init(path: of)
     }

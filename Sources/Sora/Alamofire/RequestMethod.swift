@@ -1,5 +1,5 @@
 //
-//  Session.swift
+//  RequestMethod.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -24,17 +24,47 @@
 
 import Alamofire
 
-/// Extension to `Session` of the `Alamofire`
-public extension Session {
+/// Type representing HTTP methods. Raw `String` value is stored and compared case-sensitively, so
+/// `RequestMethod.get != RequestMethod(rawValue: "get")`.
+public enum RequestMethod: String {
     
-    /// Creates a `DataRequest` from a `Requestable`.
-    ///
-    /// - Parameters:
-    ///   - soraRequest: `Requestable` value to be used to create the `URLRequest`.
-    ///
-    /// - Returns:       The created `DataRequest`.
-    func request(_ requestable: any Requestable) -> DataRequest {
-        return request(requestable,
-                       interceptor: requestable.route.interceptor)
+    /// `CONNECT` method.
+    case connect = "CONNECT"
+    
+    /// `DELETE` method.
+    case delete = "DELETE"
+    
+    /// `GET` method.
+    case get = "GET"
+    
+    /// `HEAD` method.
+    case head = "HEAD"
+    
+    /// `OPTIONS` method.
+    case options = "OPTIONS"
+    
+    /// `PATCH` method.
+    case patch = "PATCH"
+    
+    /// `POST` method.
+    case post = "POST"
+    
+    /// `PUT` method.
+    case put = "PUT"
+    
+    /// `QUERY` method.
+    case query = "QUERY"
+    
+    /// `TRACE` method.
+    case trace = "TRACE"
+    
+    /// Defining default `encoder` of the `RequestMethod`.
+    var encoder: ParameterEncoder {
+        switch self {
+        case .post, .put, .patch, .delete:
+            JSONParameterEncoder.default
+        default:
+            URLEncodedFormParameterEncoder.default
+        }
     }
 }

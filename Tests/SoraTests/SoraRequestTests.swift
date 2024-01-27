@@ -4,8 +4,8 @@ import Alamofire
 
 final class SoraTests: XCTestCase {
     
-    // MARK: - SoraService
-    struct TestService: SoraService {
+    // MARK: - Service
+    struct TestService: Service {
         
         let endpoint: URL = URL(string: "https://reqres.in/api/")!
         let path: [String]
@@ -14,9 +14,9 @@ final class SoraTests: XCTestCase {
     // MARK: - GET Request
     func testGetRequest() async throws {
         
-        struct GetExample: SoraRequest {
+        struct GetExample: Requestable {
             let route: TestService = .path("users")
-            let method: SoraMethod = .get
+            let method: RequestMethod = .get
         }
         
         let response = await AF.request(GetExample())
@@ -34,10 +34,10 @@ final class SoraTests: XCTestCase {
     // MARK: - POST Request
     func testPostRequest() async throws {
         
-        struct PostExample: SoraRequest {
+        struct PostExample: Requestable, Body {
             
             let route: TestService = .path("users")
-            let method: SoraMethod = .post
+            let method: RequestMethod = .post
             
             let body: Body
             
@@ -65,9 +65,9 @@ final class SoraTests: XCTestCase {
     // MARK: - Simple Concurrency
     func testSimpleConcurrency() async throws {
         
-        struct GetExample: SoraRequest {
+        struct GetExample: Requestable {
             let route: TestService = .path("users")
-            let method: SoraMethod = .get
+            let method: RequestMethod = .get
         }
         
         struct Requres: Codable {

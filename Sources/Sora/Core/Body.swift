@@ -1,5 +1,5 @@
 //
-//  SoraMethod.swift
+//  Body.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -22,49 +22,12 @@
 //  SOFTWARE.
 //
 
-import Alamofire
+import Foundation
 
-/// Type representing HTTP methods. Raw `String` value is stored and compared case-sensitively, so
-/// `SoraMethod.get != SoraMethod(rawValue: "get")`.
-public enum SoraMethod: String {
+/// A type used to define a request with a `Encodable` body.
+public protocol Body {
     
-    /// `CONNECT` method.
-    case connect = "CONNECT"
-    
-    /// `DELETE` method.
-    case delete = "DELETE"
-    
-    /// `GET` method.
-    case get = "GET"
-    
-    /// `HEAD` method.
-    case head = "HEAD"
-    
-    /// `OPTIONS` method.
-    case options = "OPTIONS"
-    
-    /// `PATCH` method.
-    case patch = "PATCH"
-    
-    /// `POST` method.
-    case post = "POST"
-    
-    /// `PUT` method.
-    case put = "PUT"
-    
-    /// `QUERY` method.
-    case query = "QUERY"
-    
-    /// `TRACE` method.
-    case trace = "TRACE"
-    
-    /// Defining default `encoder` of the `HTTPMethod`.
-    var encoder: ParameterEncoder {
-        switch self {
-        case .post, .put, .patch, .delete:
-            JSONParameterEncoder.default
-        default:
-            URLEncodedFormParameterEncoder.default
-        }
-    }
+    /// The `body`(a.k.a. parameter) for the request.
+    associatedtype BodyType: Encodable
+    var body: BodyType { get }
 }

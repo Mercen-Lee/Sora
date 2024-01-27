@@ -1,5 +1,5 @@
 //
-//  SoraRequest.swift
+//  Requestable.swift
 //
 //  Copyright (c) 2024 Mercen
 //
@@ -26,20 +26,17 @@ import Foundation
 import Alamofire
 
 /// A type used to define a request can be converted to the `URLRequest`.
-public protocol SoraRequest: URLRequestConvertible {
+public protocol Requestable: URLRequestConvertible {
     
-    /// The `SoraService` route of the request.
-    associatedtype Service: SoraService
-    var route: Service { get }
+    /// The `Service` route of the request.
+    associatedtype ServiceType: Service
+    var route: ServiceType { get }
     
     /// The HTTP method of the request.
-    var method: SoraMethod { get }
+    var method: RequestMethod { get }
     
     /// The `encoder` of the parameter.
     var encoder: ParameterEncoder { get }
-    
-    /// The `body`(a.k.a. parameter) for the request.
-    var body: Encodable { get }
     
     /// Returns a `URLRequest` or throws if an `Error` was encountered.
     ///
@@ -64,32 +61,27 @@ public protocol SoraRequest: URLRequestConvertible {
                                decoder: JSONDecoder?) async throws -> T
 }
 
-fileprivate struct EmptyEncodable: Encodable { }
-
-public extension SoraRequest {
+public extension Requestable {
     
     /// A default `encoder` of the parameter.
     var encoder: ParameterEncoder {
         method.encoder
     }
     
-    /// A default `body`(a.k.a. parameter) for the request.
-    var body: Encodable { EmptyEncodable() }
-    
-    /// An implement of `asURLRequest` method of `SoraRequest`.
+    /// An implement of `asURLRequest` method of `Requestable`.
     func asURLRequest() throws -> URLRequest {
         var request = URLRequest(url: route.url)
         request.httpMethod = method.rawValue
-        let body = body as Encodable
-        return try encoder.encode(body, into: request)
+        guard let body = self as? any Body else { return request }
+        return try encoder.encode(body.body, into: request)
     }
     
-    /// An implement of `request` method of `SoraRequest`.
+    /// An implement of `request` method of `Requestable`.
     func request() async throws {
         let _ = try await self.request(decodeWith: Empty.self)
     }
     
-    /// An implement of `request` method of `SoraRequest` with `Decodable`.
+    /// An implement of `request` method of `Requestable` with `Decodable`.
     func request<T: Decodable>(decodeWith: T.Type,
                                decoder: JSONDecoder? = nil) async throws -> T {
         let response = await AF.request(self)

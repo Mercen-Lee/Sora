@@ -27,7 +27,7 @@ dependencies: [
 ## Usage
 ### Service
 ```swift
-struct SampleService: SoraService {
+struct Sample: Service {
 
     let endpoint: URL = .init(string: "https://sample.com/api/")!
     let interceptor: Interceptor = .init()
@@ -36,20 +36,20 @@ struct SampleService: SoraService {
 ```
 ### GET Request
 ```swift
-struct GetUserRequest: SoraRequest {
+struct GetUserRequest: Requestable {
 
-    let route: SampleService = .path("user")
-    let method: SoraMethod = .get
+    let route = Sample.path("user")
+    let method: RequestMethod = .get
 }
 
 AF.request(GetUserRequest())
 ```
 ### POST Request
 ```swift
-struct PostUserRequest: SoraRequest {
+struct PostUserRequest: Requestable, Body {
 
-    let route: SampleService = .path("user", "post")
-    let method: SoraMethod = .post
+    let route = Sample.path("user", "post")
+    let method: RequestMethod = .post
     
     let body: Body
     
