@@ -83,14 +83,19 @@ public extension Requestable {
     
     /// An implement of `request` method of `Requestable` with `Decodable`.
     func request<T: Decodable>(decodeWith: T.Type,
-                               decoder: JSONDecoder? = nil) async throws -> T {
+                               decoder: JSONDecoder? = nil,
+                               printResponse: Bool = false) async throws -> T {
         let response = await AF.request(self)
             .validate()
-            .serializingDecodable(T.self, decoder: decoder ?? route.decoder)
+            .serializingData()
             .response
+        if let data = response.data, printResponse {
+            print(String(decoding: data, as: UTF8.self))
+        }
         switch response.result {
         case .success(let data):
-            return data
+            let decoder = decoder ?? route.decoder
+            return try decoder.decode(decodeWith, from: data)
         case .failure(let error):
             throw error
         }
