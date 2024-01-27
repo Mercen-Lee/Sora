@@ -39,7 +39,7 @@ final class SoraTests: XCTestCase {
             let route: TestService = .path("users")
             let method: SoraMethod = .post
             
-            let body: Body?
+            let body: Body
             
             struct Body: Encodable {
                 

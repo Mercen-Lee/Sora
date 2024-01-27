@@ -39,8 +39,7 @@ public protocol SoraRequest: URLRequestConvertible {
     var encoder: ParameterEncoder { get }
     
     /// The `body`(a.k.a. parameter) for the request.
-    associatedtype Body: Encodable = Empty
-    var body: Body? { get }
+    var body: Encodable { get }
     
     /// Returns a `URLRequest` or throws if an `Error` was encountered.
     ///
@@ -65,11 +64,7 @@ public protocol SoraRequest: URLRequestConvertible {
                                decoder: JSONDecoder?) async throws -> T
 }
 
-public extension SoraRequest where Body == Empty {
-    
-    /// A default `body`(a.k.a. parameter) for the request.
-    var body: Body? { nil }
-}
+fileprivate struct EmptyEncodable: Encodable { }
 
 public extension SoraRequest {
     
@@ -78,10 +73,14 @@ public extension SoraRequest {
         method.encoder
     }
     
+    /// A default `body`(a.k.a. parameter) for the request.
+    var body: Encodable { EmptyEncodable() }
+    
     /// An implement of `asURLRequest` method of `SoraRequest`.
     func asURLRequest() throws -> URLRequest {
         var request = URLRequest(url: route.url)
         request.httpMethod = method.rawValue
+        let body = body as Encodable
         return try encoder.encode(body, into: request)
     }
     
